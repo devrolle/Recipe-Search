@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 import filters from '@/consts/filters';
 import { Filter } from '@/components/Filter';
-
-interface SelectedFilters {
-    diet: string[];
-    health: string[];
-    cuisineType: string[];
-    mealType: string[];
-}
+import { SelectedFilters } from '@/types/interfaces';
+import { GenerateURL } from '@/helpers/generateURL';
 
 export default function Home() {
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -17,39 +12,32 @@ export default function Home() {
         mealType: [],
     });
 
-    useEffect(() => {
-        // Fetch Recipes
-        // fetch(
-        //     `${process.env.NEXT_PUBLIC_BASE_URL}/api/recipes/v2?type=public&app_id=${process.env.NEXT_PUBLIC_APPLICATION_ID}&app_key=${process.env.NEXT_PUBLIC_APPLICATION_KEY}&diet=${selectedFilters.diet}&health=${selectedFilters.health}&cuisineType=${selectedFilters.cuisineType}&mealType=${selectedFilters.mealType}`,
-        //     {
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //     }
-        // )
-        //     .then((res) => {
-        //         return res.json();
-        //     })
-        //     .then((data) => {
-        //         console.log(data);
-        //     });
-        fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/recipes/v2?type=public&app_id=${process.env.NEXT_PUBLIC_APPLICATION_ID}&app_key=${process.env.NEXT_PUBLIC_APPLICATION_KEY}&diet=high-fiber&health=alcohol-free&cuisineType=Middle Eastern&mealType=Lunch`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
+    const updateFilter = (
+        value: string,
+        identifier: 'diet' | 'health' | 'cuisineType' | 'mealType'
+    ) => {
+        const selectedFiltersCopy: SelectedFilters = selectedFilters;
+        selectedFiltersCopy[`${identifier}`] = [value];
+
+        setSelectedFilters({ ...selectedFilters, ...selectedFiltersCopy });
+    };
+
+    function Search() {
+        const url = GenerateURL(selectedFilters);
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
             .then((res) => {
                 return res.json();
             })
             .then((data) => {
-                console.log(data);
+                console.log('Data: ', data);
             });
-    }, []);
+    }
+
     return (
         <section>
             <header>
@@ -64,10 +52,13 @@ export default function Home() {
                     <Filter
                         baseLabel={filter.baseLabel}
                         options={filter.options}
+                        identifier={filter.identifier}
+                        updateFilter={updateFilter}
                         key={index}
                     />
                 ))}
             </div>
+            <button onClick={Search}>Search</button>
         </section>
     );
 }

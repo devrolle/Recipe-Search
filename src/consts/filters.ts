@@ -1,12 +1,4 @@
-export interface Filter {
-    baseLabel: string;
-    options: FilterOption[];
-}
-
-export interface FilterOption {
-    label: string;
-    value: string;
-}
+import { Filter } from '@/types/interfaces';
 
 const filters: Filter[] = [
     {
@@ -37,6 +29,7 @@ const filters: Filter[] = [
                 value: 'low-sodium',
             },
         ],
+        identifier: 'diet',
     },
 
     {
@@ -67,6 +60,7 @@ const filters: Filter[] = [
                 value: 'pork-free',
             },
         ],
+        identifier: 'health',
     },
 
     {
@@ -97,6 +91,7 @@ const filters: Filter[] = [
                 value: 'Middle Eastern',
             },
         ],
+        identifier: 'cuisineType',
     },
 
     {
@@ -123,6 +118,7 @@ const filters: Filter[] = [
                 value: 'Teatime',
             },
         ],
+        identifier: 'mealType',
     },
 ];
 
