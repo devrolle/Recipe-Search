@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import filters from '@/consts/filters';
 import { Filter } from '@/components/Filter';
-import { SelectedFilters } from '@/types/interfaces';
+import { Recipe, SelectedFilters } from '@/types/interfaces';
 import { GenerateURL } from '@/helpers/generateURL';
 
 export default function Home() {
@@ -11,6 +11,7 @@ export default function Home() {
         cuisineType: [],
         mealType: [],
     });
+    const [recipes, setRecipes] = useState<Recipe[]>();
 
     const updateFilter = (
         value: string,
@@ -34,7 +35,12 @@ export default function Home() {
                 return res.json();
             })
             .then((data) => {
-                console.log('Data: ', data);
+                const dataRecipes: Recipe[] = [];
+                data.hits.map((hit: any) => {
+                    dataRecipes.push(hit.recipe);
+                });
+
+                setRecipes(dataRecipes);
             });
     }
 
