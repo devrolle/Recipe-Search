@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import filters from '@/consts/filters';
 import { Filter } from '@/components/Filter';
 import { Recipe as RecipeI, SelectedFilters } from '@/types/interfaces';
@@ -12,8 +12,8 @@ export default function Home() {
         cuisineType: [],
         mealType: [],
     });
-    const [recipes, setRecipes] = useState<RecipeI[]>();
-
+    const [recipes, setRecipes] = useState<RecipeI[]>([]);
+    const [emptyResponse, setEmptyResponse] = useState<boolean>(false);
     const updateFilter = (
         value: string,
         identifier: 'diet' | 'health' | 'cuisineType' | 'mealType'
@@ -40,6 +40,12 @@ export default function Home() {
                 data.hits.map((hit: any) => {
                     dataRecipes.push(hit.recipe);
                 });
+
+                if (data.hits.length < 1) {
+                    setEmptyResponse(true);
+                } else {
+                    setEmptyResponse(false);
+                }
 
                 setRecipes(dataRecipes);
             });
@@ -75,11 +81,15 @@ export default function Home() {
                     Search
                 </button>
             </div>
-            <div className="grid grid-cols-3 gap-2 mt-10">
-                {recipes?.map((recipe, index) => (
-                    <Recipe recipe={recipe} key={index} />
-                ))}
-            </div>
+            {!emptyResponse ? (
+                <div className="grid grid-cols-3 gap-2 mt-10">
+                    {recipes?.map((recipe, index) => (
+                        <Recipe recipe={recipe} key={index} />
+                    ))}
+                </div>
+            ) : (
+                <p>No Recipes Found...</p>
+            )}
         </section>
     );
 }
