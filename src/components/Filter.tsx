@@ -15,7 +15,10 @@ export const Filter = ({
     updateFilter,
 }: FilterProps) => {
     return (
-        <select onChange={(e) => updateFilter(e.target.value, identifier)}>
+        <select
+            className="border-2 border-blue-300 rounded-md text-blue-400 font-normal px-3 py-2 appearance-none outline-none cursor-pointer"
+            onChange={(e) => updateFilter(e.target.value, identifier)}
+        >
             <option value="">{baseLabel}</option>
             {options.map((option, index) => (
                 <option value={option.value} key={index}>

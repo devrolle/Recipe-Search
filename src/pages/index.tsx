@@ -46,15 +46,17 @@ export default function Home() {
     }
 
     return (
-        <section>
+        <section className="max-w-6xl mx-auto mt-20">
             <header>
-                <h1>Recipe Search</h1>
-                <p>
+                <h1 className="text-blue-200 font-bold text-4xl">
+                    Recipe Search
+                </h1>
+                <p className="font-light text-lg my-2">
                     Use the following filters to describe the recipe that best
                     fits you then search!
                 </p>
             </header>
-            <div id="filter-grid">
+            <div className="grid grid-cols-4 gap-2">
                 {filters.map((filter, index) => (
                     <Filter
                         baseLabel={filter.baseLabel}
@@ -65,10 +67,19 @@ export default function Home() {
                     />
                 ))}
             </div>
-            <button onClick={Search}>Search</button>
-            {recipes?.map((recipe, index) => (
-                <Recipe recipe={recipe} key={index} />
-            ))}
+            <div className="w-full flex justify-center my-6">
+                <button
+                    onClick={Search}
+                    className="border-4 border-red-300 text-red-300 font-semibold text-lg py-2 px-5 rounded-lg mt-4 hover:bg-red-300 hover:text-white duration-200 w-1/4"
+                >
+                    Search
+                </button>
+            </div>
+            <div className="grid grid-cols-3 gap-2 mt-10">
+                {recipes?.map((recipe, index) => (
+                    <Recipe recipe={recipe} key={index} />
+                ))}
+            </div>
         </section>
     );
 }
