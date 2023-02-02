@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import filters from '@/consts/filters';
 import { Filter } from '@/components/Filter';
-import { Recipe, SelectedFilters } from '@/types/interfaces';
+import { Recipe as RecipeI, SelectedFilters } from '@/types/interfaces';
 import { GenerateURL } from '@/helpers/generateURL';
+import { Recipe } from '@/components/Recipe';
 
 export default function Home() {
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -11,7 +12,7 @@ export default function Home() {
         cuisineType: [],
         mealType: [],
     });
-    const [recipes, setRecipes] = useState<Recipe[]>();
+    const [recipes, setRecipes] = useState<RecipeI[]>();
 
     const updateFilter = (
         value: string,
@@ -35,7 +36,7 @@ export default function Home() {
                 return res.json();
             })
             .then((data) => {
-                const dataRecipes: Recipe[] = [];
+                const dataRecipes: RecipeI[] = [];
                 data.hits.map((hit: any) => {
                     dataRecipes.push(hit.recipe);
                 });
@@ -65,6 +66,9 @@ export default function Home() {
                 ))}
             </div>
             <button onClick={Search}>Search</button>
+            {recipes?.map((recipe, index) => (
+                <Recipe recipe={recipe} key={index} />
+            ))}
         </section>
     );
 }
